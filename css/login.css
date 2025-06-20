@@ -1,0 +1,104 @@
+/* login.css */
+
+/* Estilos específicos para a página de login */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center; /* Centraliza verticalmente o conteúdo */
+    align-items: center; /* Centraliza horizontalmente o conteúdo */
+    background-color: var(--granja-light-gray); /* Cor de fundo suave */
+}
+
+.login-container {
+    flex-grow: 1; /* Permite que o container de login ocupe o espaço restante */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: var(--granja-white);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid var(--granja-gray);
+}
+
+.login-box h2 {
+    color: var(--granja-green-dark);
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.login-box .input-group {
+    margin-bottom: 20px;
+    text-align: left; /* Alinha labels à esquerda */
+}
+
+.login-box label {
+    display: block; /* Garante que a label ocupe sua própria linha */
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--granja-dark-gray);
+}
+
+.login-box input[type="email"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--granja-gray);
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: var(--granja-light-gray);
+    color: var(--granja-dark-gray);
+    box-sizing: border-box; /* Inclui padding na largura */
+}
+
+.login-box button {
+    background-color: var(--granja-blue);
+    color: var(--granja-white);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.login-box button:hover {
+    background-color: #0056b3;
+}
+
+.status-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+.status-message.success {
+    background-color: #e6ffe6;
+    color: var(--granja-green-dark);
+    border: 1px solid var(--granja-green-medium);
+}
+
+.status-message.error {
+    background-color: #ffe6e6;
+    color: var(--granja-red);
+    border: 1px solid var(--granja-red);
+}
+
+.footer { /* Ajuste o rodapé para páginas com conteúdo centralizado */
+    margin-top: 0; /* Remove margem superior, pois o body já centraliza */
+    padding: 15px 20px;
+}

@@ -1,0 +1,139 @@
+/* admin.css */
+
+/* Estilos específicos para a página administrativa */
+
+section { /* Garante um espaçamento consistente para as seções */
+    background-color: var(--granja-white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-top: 25px; /* Espaço entre as seções */
+    border: 1px solid var(--granja-gray);
+}
+
+section h2 {
+    color: var(--granja-green-dark);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+section p {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--granja-dark-gray);
+}
+
+
+.upload-form,
+.covid-form,
+.form-control, /* .form-control é usado para Competência e Criar Usuário */
+.paste-form { /* Estilo para os formulários de upload de arquivo e de colar */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto; /* Centraliza o formulário */
+    padding: 25px; /* Padding interno para o formulário */
+    border: none; /* A borda e sombra já estão na seção pai */
+    background-color: transparent; /* Fundo transparente, já que a seção tem o fundo branco */
+    box-shadow: none; /* Remove sombra duplicada */
+}
+
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: var(--granja-dark-gray);
+    font-size: 1.1em;
+}
+
+.input-group input[type="file"],
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="password"],
+.form-control input[type="text"],
+.form-control input[type="email"],
+.form-control input[type="password"],
+.form-control select,
+.paste-form textarea { /* Estilo para o textarea de colar */
+    padding: 10px;
+    border: 1px solid var(--granja-gray);
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: var(--granja-light-gray);
+    color: var(--granja-dark-gray);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100px; /* Altura mínima para o textarea */
+    resize: vertical; /* Permite redimensionar verticalmente */
+}
+
+/* Estilos para todos os botões de ação na página admin */
+.upload-form button,
+.covid-form button,
+.form-control button,
+.paste-form button { /* Estilo para todos os botões */
+    background-color: var(--granja-blue);
+    color: var(--granja-white);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.upload-form button:hover,
+.covid-form button:hover,
+.form-control button:hover,
+.paste-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para as mensagens de status */
+#upload-status,
+#covid-status,
+#competencia-status,
+#create-user-status,
+#paste-tema-status, /* Adicionado para o status de colar tema */
+#paste-pratica-status { /* Adicionado para o status de colar pratica */
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-top: 20px;
+    display: block;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Status de sucesso e erro */
+#upload-status.success,
+#covid-status.success,
+#competencia-status.success,
+#create-user-status.success,
+#paste-tema-status.success,
+#paste-pratica-status.success {
+    background-color: #e6ffe6;
+    color: var(--granja-green-dark);
+    border: 1px solid var(--granja-green-medium);
+}
+
+#upload-status.error,
+#covid-status.error,
+#competencia-status.error,
+#create-user-status.error,
+#paste-tema-status.error,
+#paste-pratica-status.error {
+    background-color: #ffe6e6;
+    color: var(--granja-red);
+    border: 1px solid var(--granja-red);
+}

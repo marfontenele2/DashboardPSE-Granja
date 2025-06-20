@@ -1,0 +1,140 @@
+/* escolas.css */
+
+/* Estilos específicos para a página de rastreamento de escolas */
+
+#emulti-selector-container {
+    background-color: var(--granja-white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.emulti-buttons-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.btn-emulti-selector {
+    background-color: var(--granja-light-gray);
+    color: var(--granja-dark-gray);
+    padding: 10px 20px;
+    border: 1px solid var(--granja-gray);
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-emulti-selector:hover {
+    background-color: #dcdcdc;
+}
+
+.btn-emulti-selector.active {
+    background-color: var(--granja-blue);
+    color: var(--granja-white);
+    border-color: var(--granja-blue);
+    box-shadow: 0 2px 5px rgba(0,114,198,.3);
+}
+
+.schools-table-section {
+    background-color: var(--granja-white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    margin-bottom: 25px;
+}
+
+.schools-table-section h2 {
+    color: var(--granja-green-dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.schools-activities-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.schools-activities-table thead th {
+    background-color: var(--granja-green-medium);
+    color: var(--granja-white);
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 0.9em;
+    white-space: nowrap; /* Evita quebra de linha nos cabeçalhos */
+    position: sticky;
+    top: 0; /* Fixa o cabeçalho ao rolar */
+    z-index: 1;
+}
+
+/* Estilo para as colunas de atividades prioritárias com transparência */
+.schools-activities-table th.priority-action-column,
+.schools-activities-table td.priority-action-cell {
+    background-color: rgba(0, 114, 198, 0.1); /* Azul com 10% de opacidade */
+    /* Mantém a cor de texto padrão para melhor visibilidade com fundo claro */
+    color: var(--granja-dark-gray);
+}
+
+/* Garante que o texto dentro do TH prioritário permaneça legível */
+.schools-activities-table th.priority-action-column {
+    color: var(--granja-green-dark) !important; /* Cor mais escura para o título no cabeçalho */
+}
+/* Cores dos ícones nas células prioritárias para contraste no azul transparente */
+.schools-activities-table td.priority-action-cell .activity-status-icon.checked {
+    color: var(--granja-blue); /* Azul mais forte para o check */
+}
+.schools-activities-table td.priority-action-cell .activity-status-icon.unchecked {
+    color: var(--granja-red); /* Vermelho para o X */
+}
+
+
+.schools-activities-table tbody td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--granja-light-gray);
+    font-size: 0.85em;
+    color: var(--granja-dark-gray);
+    white-space: nowrap; /* Evita quebra de linha em células */
+}
+
+.schools-activities-table tbody tr:nth-child(even) {
+    background-color: var(--granja-light-gray);
+}
+
+.schools-activities-table tbody tr:hover {
+    background-color: #e0f2f7; /* Cor ao passar o mouse */
+}
+
+.table-responsive {
+    max-height: 600px; /* Altura máxima para a tabela rolar */
+    overflow-y: auto; /* Adiciona scroll vertical se o conteúdo for maior */
+    border: 1px solid var(--granja-gray);
+    border-radius: 8px;
+}
+
+/* Estilo para o ícone de status */
+.activity-status-icon {
+    font-size: 1.2em; /* Tamanho dos ícones */
+    text-align: center;
+    display: block; /* Garante que o ícone ocupe o espaço */
+}
+
+/* Cores padrão dos ícones (para colunas não prioritárias) */
+.activity-status-icon.checked {
+    color: var(--granja-green-medium); /* Cor para ✅ */
+}
+
+.activity-status-icon.unchecked {
+    color: var(--granja-red); /* Cor para ❌ */
+}
+
+/* Botão de salvar (agora removido do HTML) */
+.save-button {
+    display: none; /* Garante que o botão não apareça */
+}

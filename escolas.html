@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolas por E-multi - PSE Granja</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/escolas.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-top-bar">
+      <div class="header-logo-container">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjH8-ldDYUyOf8ZmuPKLNFnAkBVEq_OUAhY30-hCLxiK83G3qAQ0ufda9Vihur1GoZqTB_0gfrj-2cFNhGUh3pI9qmsIiSiKSfR5NBpFTIrVOwTOEomrYhDtMrfAW9tQk4Fo_OX1haM678hcQe_EjRHql94BBK0E38lrQiimo8zQGG5aPw3YYiKRD0FAyE/s1600/Logo%20transparente%20de%20Granja.png" alt="Logo do Município de Granja" class="logo">
+        <h1>Escolas por E-multi - Rastreamento de Atividades</h1>
+      </div>
+      <div class="header-info">
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="escolas.html" class="nav-link active">Escolas por eMulti</a>
+            <a href="admin.html" class="nav-link admin-only">Painel Admin</a>
+            <a href="#" id="logout-link" class="nav-link">Sair</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section id="emulti-selector-container">
+      <h2>Selecione a eMulti</h2>
+      <div class="emulti-buttons-grid">
+        </div>
+    </section>
+
+    <section id="schools-list-container" class="schools-table-section">
+      <h2>Escolas da eMulti Selecionada: <span id="selected-emulti-name"></span></h2>
+      <div class="table-responsive">
+        <table id="schools-activities-table" class="schools-activities-table">
+          <thead>
+            <tr>
+              <th>INEP</th>
+              <th>Nome da Escola</th>
+              </tr>
+          </thead>
+          <tbody>
+            </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
+  </footer>
+
+  <script type="module" src="js/escolas.js"></script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

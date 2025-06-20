@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Dashboard PSE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css"> <link rel="stylesheet" href="css/login.css"> </head>
+<body>
+
+  <header class="header">
+    <div class="header-top-bar">
+      <div class="header-logo-container">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjH8-ldDYUyOf8ZmuPKLNFnAkBVEq_OUAhY30-hCLxiK83G3qAQ0ufda9Vihur1GoZqTB_0gfrj-2cFNhGUh3pI9qmsIiSiKSfR5NBpFTIrVOwTOEomrYhDtMrfAW9tQk4Fo_OX1haM678hcQe_EjRHql94BBK0E38lrQiimo8zQGG5aPw3YYiKRD0FAyE/s1600/Logo%20transparente%20de%20Granja.png" alt="Logo do Município de Granja" class="logo">
+        <h1>Login - Dashboard PSE</h1>
+      </div>
+    </div>
+  </header>
+
+  <div class="container login-container">
+    <section class="login-box">
+      <h2>Acesso ao Sistema</h2>
+      <div class="input-group">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" placeholder="seuemail@exemplo.com">
+      </div>
+      <div class="input-group">
+        <label for="loginPassword">Senha:</label>
+        <input type="password" id="loginPassword" placeholder="Sua senha">
+      </div>
+      <button id="loginBtn">Entrar</button>
+      <div id="login-status" class="status-message"></div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
+  </footer>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

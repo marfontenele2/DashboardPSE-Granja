@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard PSE - Granja/CE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-top-bar">
+      <div class="header-logo-container">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjH8-ldDYUyOf8ZmuPKLNFnAkBVEq_OUAhY30-hCLxiK83G3qAQ0ufda9Vihur1GoZqTB_0gfrj-2cFNhGUh3pI9qmsIiSiKSfR5NBpFTIrVOwTOEomrYhDtMrfAW9tQk4Fo_OX1haM678hcQe_EjRHql94BBK0E38lrQiimo8zQGG5aPw3YYiKRD0FAyE/s1600/Logo%20transparente%20de%20Granja.png" alt="Logo do Município de Granja" class="logo">
+        <h1>Dashboard PSE</h1>
+      </div>
+      <div class="header-info">
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link active">Dashboard</a>
+            <a href="escolas.html" class="nav-link">Escolas por eMulti</a>
+            <a href="admin.html" class="nav-link admin-only">Painel Admin</a>
+            <a href="#" id="logout-link" class="nav-link">Sair</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section id="seletor-indicador-container"></section>
+    <section id="visao-geral-container" class="visao-geral-grid"></section>
+    <section id="filtros-container" class="painel-filtros" style="display:none;"></section> 
+    <section id="legendas-container" class="legendas-container" style="display:none;"></section>
+    <main id="grade-principal" class="grade-container"></main>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
