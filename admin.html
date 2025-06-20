@@ -4,10 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Administrativo - Upload de Dados PSE</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
   <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // Suas credenciais de configuração do Firebase.
+    // Esta configuração é a mesma para todas as páginas e é inicializada UMA ÚNICA VEZ por página HTML.
+    const firebaseConfig = {
+      apiKey: "AIzaSyDtF5zN7KLcoMvvOlYhP1Btn0hD_IcFUhs",
+      authDomain: "pse-granja.firebaseapp.com",
+      projectId: "pse-granja",
+      storageBucket: "pse-granja.firebasestorage.app",
+      messagingSenderId: "3638651287",
+      appId: "1:3638651287:web:760797d66ed93cab0efcd2"
+    };
+    // Inicializa o Firebase AQUI. Após esta linha, 'firebase.firestore()' e 'firebase.auth()' estarão disponíveis globalmente.
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body>
 
@@ -21,7 +40,7 @@
         <nav class="main-nav">
             <a href="index.html" class="nav-link">Dashboard</a>
             <a href="escolas.html" class="nav-link">Escolas por eMulti</a>
-            <a href="admin.html" class="nav-link admin-only active">Painel Admin</a>
+            <a href="admin.html" class="nav-link admin-only">Painel Admin</a>
             <a href="#" id="logout-link" class="nav-link">Sair</a>
         </nav>
       </div>
@@ -43,7 +62,7 @@
           <label for="excelTemaUpload">Arquivo PSE - Tema de Saúde (Excel):</label>
           <input type="file" id="excelTemaUpload" accept=".xlsx, .xls">
         </div>
-        
+
         <button id="processFilesBtn">Processar e Salvar Dados</button>
       </div>
 
@@ -102,6 +121,44 @@
         <div id="covid-status" style="margin-top: 20px; font-weight: bold;"></div>
     </section>
 
+    <section id="register-school-section" style="margin-top: 50px;">
+        <h2>Cadastrar Nova Escola</h2>
+        <p>Adicione novas escolas ao sistema. As escolas cadastradas aqui serão usadas em todos os cálculos e listas.</p>
+        <div class="form-control">
+            <label for="schoolInepInput">INEP da Escola:</label>
+            <input type="text" id="schoolInepInput" placeholder="Ex: 23000000">
+        </div>
+        <div class="form-control">
+            <label for="schoolNameInput">Nome da Escola:</label>
+            <input type="text" id="schoolNameInput" placeholder="Ex: EEF João da Silva">
+        </div>
+        <div class="form-control">
+            <label for="schoolEmultiSelect">eMulti a que pertence:</label>
+            <select id="schoolEmultiSelect">
+                </select>
+        </div>
+        <button id="registerSchoolBtn">Cadastrar Escola</button>
+        <div id="register-school-status" style="margin-top: 20px; font-weight: bold;"></div>
+
+        <h3 style="margin-top: 40px; margin-bottom: 20px; text-align: center; color: var(--granja-green-dark);">Escolas Cadastradas</h3>
+        <div id="schools-list-status" class="status-message" style="margin-bottom: 20px;"></div>
+        <div class="table-responsive">
+            <table id="registered-schools-table" class="schools-activities-table">
+                <thead>
+                    <tr>
+                        <th>INEP</th>
+                        <th>Nome da Escola</th>
+                        <th>eMulti</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </section>
+
+
     <section id="create-user-section" style="margin-top: 50px;">
         <h2>Criar Novo Usuário</h2>
         <p>Apenas administradores podem criar novos usuários.</p>
@@ -124,13 +181,35 @@
         <div id="create-user-status" style="margin-top: 20px; font-weight: bold;"></div>
     </section>
 
+    <section id="manage-users-section" style="margin-top: 50px;">
+        <h2>Gerenciar Usuários</h2>
+        <p>Visualize e remova perfis de usuários do sistema. A remoção de um perfil aqui impede o acesso a privilégios especiais.</p>
+        <div id="user-list-status" class="status-message" style="margin-bottom: 20px;"></div>
+        <div class="table-responsive">
+            <table id="users-table" class="schools-activities-table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+        <p style="font-size: 0.85em; color: #666; margin-top: 20px;">
+            * Nota: Para remover um usuário completamente da autenticação Firebase, você precisará usar o console do Firebase ou uma Cloud Function. A remoção aqui afeta apenas o perfil de acesso no sistema.
+        </p>
+    </section>
+
   </div>
 
   <footer class="footer">
     <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
   </footer>
 
-  <script type="module" src="js/admin.js"></script>
-  <script type="module" src="js/auth.js"></script>
+  <script src="js/admin.js" type="module"></script>
+  <script src="js/auth.js" type="module"></script>
 </body>
 </html>

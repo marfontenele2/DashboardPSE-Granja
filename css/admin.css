@@ -103,7 +103,8 @@ section p {
 #competencia-status,
 #create-user-status,
 #paste-tema-status, /* Adicionado para o status de colar tema */
-#paste-pratica-status { /* Adicionado para o status de colar pratica */
+#paste-pratica-status, /* Adicionado para o status de colar pratica */
+#user-list-status /* Adicionado para o status da lista de usuários */ {
     text-align: center;
     padding: 10px;
     border-radius: 5px;
@@ -121,7 +122,8 @@ section p {
 #competencia-status.success,
 #create-user-status.success,
 #paste-tema-status.success,
-#paste-pratica-status.success {
+#paste-pratica-status.success,
+#user-list-status.success {
     background-color: #e6ffe6;
     color: var(--granja-green-dark);
     border: 1px solid var(--granja-green-medium);
@@ -132,8 +134,83 @@ section p {
 #competencia-status.error,
 #create-user-status.error,
 #paste-tema-status.error,
-#paste-pratica-status.error {
+#paste-pratica-status.error,
+#user-list-status.error {
     background-color: #ffe6e6;
     color: var(--granja-red);
     border: 1px solid var(--granja-red);
+}
+
+/* NOVO: Estilos para a tabela de gerenciamento de usuários */
+#manage-users-section .table-responsive {
+    max-height: 400px; /* Altura máxima para a tabela de usuários com scroll */
+}
+
+#users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#users-table thead th {
+    background-color: var(--granja-green-medium);
+    color: var(--granja-white);
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 0.9em;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+#users-table tbody td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--granja-light-gray);
+    font-size: 0.85em;
+    color: var(--granja-dark-gray);
+    white-space: nowrap;
+}
+
+#users-table tbody tr:nth-child(even) {
+    background-color: var(--granja-light-gray);
+}
+
+#users-table tbody tr:hover {
+    background-color: #e0f2f7;
+}
+
+/* Estilo para o botão de remover perfil */
+.remove-user-btn {
+    background-color: var(--granja-red);
+    color: var(--granja-white);
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-flex; /* Para alinhar ícone e texto */
+    align-items: center;
+    gap: 5px;
+}
+
+.remove-user-btn:hover:not(:disabled) {
+    background-color: #c62828; /* Vermelho mais escuro no hover */
+}
+
+.remove-user-btn:disabled {
+    background-color: #cccccc; /* Cinza para desabilitado */
+    cursor: not-allowed;
+}
+
+.remove-user-btn i {
+    font-size: 1em;
+}
+
+/* Estilo para a mensagem de status "info" na lista de usuários */
+#user-list-status.info {
+    background-color: #e3f2fd; /* Azul claro suave */
+    color: var(--granja-blue);
+    border: 1px solid #90caf9;
 }

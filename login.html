@@ -4,8 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Dashboard PSE</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="css/style.css"> <link rel="stylesheet" href="css/login.css"> </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // Suas credenciais de configuração do Firebase.
+    // Esta configuração é a mesma para todas as páginas e é inicializada UMA ÚNICA VEZ por página HTML.
+    const firebaseConfig = {
+      apiKey: "AIzaSyDtF5zN7KLcoMvvOlYhP1Btn0hD_IcFUhs",
+      authDomain: "pse-granja.firebaseapp.com",
+      projectId: "pse-granja",
+      storageBucket: "pse-granja.firebasestorage.app",
+      messagingSenderId: "3638651287",
+      appId: "1:3638651287:web:760797d66ed93cab0efcd2"
+    };
+    // Inicializa o Firebase AQUI. Após esta linha, 'firebase.firestore()' e 'firebase.auth()' estarão disponíveis globalmente.
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
 <body>
 
   <header class="header">
@@ -37,6 +58,6 @@
     <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
   </footer>
 
-  <script type="module" src="js/auth.js"></script>
+  <script src="js/auth.js" type="module"></script>
 </body>
 </html>
