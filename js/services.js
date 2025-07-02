@@ -1,16 +1,26 @@
-// services.js
-// Este arquivo será usado para funções que interagem com serviços externos,
-// como Firebase ou APIs. Por enquanto, será um placeholder.
+// js/services.js
 
-/**
- * Função placeholder para futuras interações com o Firebase ou outras APIs.
- * Por enquanto, não faz nada.
+/*
+ * Este arquivo é destinado a abrigar a lógica de comunicação com serviços externos.
+ * O principal caso de uso seria centralizar todas as chamadas ao Firebase aqui.
+ * Por exemplo, em vez de ter `db.collection('schools').get()` espalhado pelos arquivos `main.js`, `escolas.js` etc.,
+ * você teria uma função aqui como `export function getSchools() { return db.collection('schools').get(); }`.
+ *
+ * Isso torna seu código mais modular. Se um dia você mudar de banco de dados, só precisaria
+ * alterar as funções neste arquivo, e o resto da aplicação continuaria funcionando.
+ * Para o tamanho atual do projeto, manter a lógica nos próprios arquivos é perfeitamente aceitável.
  */
+
+// Função placeholder para futuras integrações.
 export function initializeFirebase() {
-  console.log('Serviços Firebase não inicializados (placeholder).');
-  // Quando você for integrar o Firebase, o código de inicialização virá aqui.
-  // Ex: firebase.initializeApp(firebaseConfig);
+    console.log('Services: Funções de serviço (como chamadas ao Firebase) podem ser centralizadas aqui no futuro.');
 }
 
-// TODO: Adicionar funções para salvar/carregar dados do Firebase no futuro.
-// Ex: saveSchoolData(data), loadActionsStatus().
+// Exemplo de como poderia ser no futuro:
+/*
+export async function fetchAllSchools() {
+    const db = firebase.firestore();
+    const snapshot = await db.collection('schools').get();
+    return snapshot.docs.map(doc => doc.data());
+}
+*/

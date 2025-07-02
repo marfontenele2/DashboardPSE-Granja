@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escolas por E-multi - PSE Granja</title>
+  <title>Painel de Vacinação - PSE</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/escolas.css">
-
+  <link rel="stylesheet" href="css/vacinacao.css">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDtF5zN7KLcoMvvOlYhP1Btn0hD_IcFUhs",
@@ -23,8 +21,8 @@
     };
     firebase.initializeApp(firebaseConfig);
   </script>
-  <!-- Estilo para o display da competência -->
-  <style>
+    <!-- Estilo para o display da competência -->
+    <style>
     .header-competencia {
       font-size: 1rem;
       font-weight: 500;
@@ -42,56 +40,37 @@
     <div class="header-top-bar">
       <div class="header-logo-container">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjH8-ldDYUyOf8ZmuPKLNFnAkBVEq_OUAhY30-hCLxiK83G3qAQ0ufda9Vihur1GoZqTB_0gfrj-2cFNhGUh3pI9qmsIiSiKSfR5NBpFTIrVOwTOEomrYhDtMrfAW9tQk4Fo_OX1haM678hcQe_EjRHql94BBK0E38lrQiimo8zQGG5aPw3YYiKRD0FAyE/s1600/Logo%20transparente%20de%20Granja.png" alt="Logo do Município de Granja" class="logo">
-        <h1>Escolas por E-multi</h1>
+        <h1>Painel de Vacinação</h1>
         <span id="competencia-display" class="header-competencia"></span>
       </div>
-      <div class="header-info">
-        <nav class="main-nav">
-            <a href="index.html" class="nav-link">Dashboard</a>
-            <a href="escolas.html" class="nav-link active">Escolas por eMulti</a>
-            <a href="vacinacao.html" class="nav-link">Vacinação</a>
-            <a href="saudebucal.html" class="nav-link">Saúde Bucal</a>
-            <a href="admin.html" class="nav-link admin-only">Painel Admin</a>
-            <a href="#" id="logout-link" class="nav-link">Sair</a>
-        </nav>
-      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="escolas.html" class="nav-link">Escolas por eMulti</a>
+        <a href="vacinacao.html" class="nav-link active">Vacinação</a>
+        <a href="saudebucal.html" class="nav-link">Saúde Bucal</a>
+        <a href="admin.html" class="nav-link admin-only">Painel Admin</a>
+        <a href="#" id="logout-link" class="nav-link">Sair</a>
+      </nav>
     </div>
   </header>
 
-  <div class="container">
-    <section id="emulti-selector-container">
-      <h2>Selecione a eMulti</h2>
-      <div class="emulti-buttons-grid">
+  <main class="container">
+    <div class="dashboard-header">
+      <h2>Acompanhamento da Verificação Vacinal por Equipa</h2>
+      <p>Monitore o progresso de cada Equipa de Saúde da Família na verificação vacinal das escolas vinculadas.</p>
+    </div>
+    
+    <div id="teams-dashboard-grid" class="teams-grid">
         </div>
-    </section>
-
-    <section id="schools-list-container" class="schools-table-section">
-      <h2>Escolas da eMulti Selecionada: <span id="selected-emulti-name"></span></h2>
-      <div class="table-responsive">
-        <table id="schools-activities-table" class="schools-activities-table">
-          <thead>
-            <tr>
-              </tr>
-          </thead>
-          <tbody>
-            </tbody>
-        </table>
-      </div>
-    </section>
-  </div>
+  </main>
 
   <footer class="footer">
     <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
   </footer>
 
-  <script src="js/escolas.js" type="module"></script>
+  <!-- Scripts Carregados na Ordem Correta -->
   <script src="js/auth.js" type="module"></script>
-  <!-- SCRIPT PARA CARREGAR A COMPETÊNCIA -->
-  <script type="module">
-    import { loadAndDisplayCompetencia } from './js/competencia.js';
-    document.addEventListener('DOMContentLoaded', () => {
-        loadAndDisplayCompetencia();
-    });
-  </script>
+  <script src="js/vacinacao.js" type="module"></script>
+  
 </body>
 </html>

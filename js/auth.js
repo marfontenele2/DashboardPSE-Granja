@@ -1,245 +1,172 @@
-// auth.js
+// js/auth.js (VERSÃO FINAL COM 2 PERFIS)
 
-// As instâncias 'firebase.firestore()' e 'firebase.auth()' são globais via CDN no HTML.
-
-// Referências do DOM para a página de login (se estivermos nela)
-const loginEmailInput = document.getElementById('loginEmail');
-const loginPasswordInput = document.getElementById('loginPassword');
-const loginBtn = document.getElementById('loginBtn');
-const loginStatusDiv = document.getElementById('login-status');
-
-// Referência do DOM para o link de Sair (logout)
-const logoutLink = document.getElementById('logout-link');
-
-// Define as páginas que requerem autenticação
-const protectedPages = ['index.html', 'escolas.html', 'admin.html'];
-
-// --- Lógica de Autenticação ---
+// Define quais páginas cada perfil de utilizador tem permissão para aceder.
+const allowedPagesByRole = {
+    // Admin pode aceder a tudo.
+    admin: ['admin.html', 'index.html', 'escolas.html', 'vacinacao.html', 'saudebucal.html'],
+    // Utilizador comum pode aceder a todos os painéis, exceto o de admin.
+    user: ['index.html', 'escolas.html', 'vacinacao.html', 'saudebucal.html']
+};
 
 /**
- * Observa o estado de autenticação do Firebase.
- * Esta função é executada sempre que o estado de autenticação muda (login, logout, recarga da página).
+ * Redireciona o navegador para uma nova página, evitando loops de recarregamento.
+ * @param {string} page - A página de destino (ex: 'index.html').
  */
-firebase.auth().onAuthStateChanged(async (user) => {
-    const currentPage = window.location.pathname.split('/').pop(); // Obtém o nome do arquivo HTML atual
+function redirectTo(page) {
+    const currentPath = window.location.pathname;
+    const targetPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + page;
 
-    console.log(`auth.js: onAuthStateChanged - Usuário atual: ${user ? user.email : 'Nenhum'}. Página: ${currentPage}`); // LOG ADICIONAL
+    if (window.location.pathname.endsWith(page) || (page === 'index.html' && currentPath.endsWith('/'))) {
+        return;
+    }
+    window.location.href = page;
+}
+
+/**
+ * Procura o perfil do utilizador no Firestore.
+ * @param {string} uid - O ID do utilizador.
+ * @returns {Promise<Object>} O objeto de perfil do utilizador.
+ */
+async function getUserProfile(uid) {
+    if (!uid) return { role: 'user' };
+    try {
+        const userRoleDoc = await firebase.firestore().collection('userRoles').doc(uid).get();
+        // Se não encontrar um perfil, assume 'user' como padrão.
+        return userRoleDoc.exists ? userRoleDoc.data() : { role: 'user' };
+    } catch (error) {
+        console.error(`Erro ao procurar perfil para o UID ${uid}:`, error);
+        return { role: 'user' };
+    }
+}
+
+// --- LÓGICA PRINCIPAL DE AUTENTICAÇÃO ---
+firebase.auth().onAuthStateChanged(async (user) => {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
     if (user) {
-        // Usuário logado
-        console.log("auth.js: Usuário logado:", user.email);
-        const userRole = await getUserRole(user.uid); // Obtém o perfil do usuário
-        console.log("auth.js: Perfil do usuário:", userRole);
+        const userProfile = await getUserProfile(user.uid);
+        const role = userProfile.role || 'user';
 
-        // Exibir link do Painel Admin apenas para admins
-        const adminLinks = document.querySelectorAll('.nav-link.admin-only');
-        if (adminLinks.length > 0) {
-            if (userRole === 'admin') {
-                adminLinks.forEach(link => link.style.display = 'block'); // Mostra para admins
-            } else {
-                adminLinks.forEach(link => link.style.display = 'none'); // Oculta para não-admins
-            }
+        // Obtém a lista de páginas permitidas para o perfil. Se o perfil não existir, usa as regras de 'user'.
+        const allowedPages = allowedPagesByRole[role] || allowedPagesByRole['user'];
+        
+        // Se a página atual NÃO ESTÁ na lista de permitidas, redireciona para a página principal do perfil.
+        if (!allowedPages.includes(currentPage)) {
+            const primaryPage = allowedPages[0]; // A primeira página da lista é a principal.
+            redirectTo(primaryPage);
+            return; // Interrompe a execução para esperar o redirecionamento.
         }
 
-        // Exibir link de Sair quando o usuário está logado
-        if (logoutLink) {
-            logoutLink.style.display = 'block';
+        // Se chegou até aqui, o utilizador está numa página permitida.
+        // Apenas ajusta a visibilidade dos links da navegação.
+        document.querySelectorAll('.nav-link.admin-only').forEach(link => {
+            link.style.display = (role === 'admin') ? 'inline-block' : 'none';
+        });
+        if (document.getElementById('logout-link')) {
+            document.getElementById('logout-link').style.display = 'inline-block';
         }
 
-        // Redireciona da página de login se já estiver logado
-        if (currentPage === 'login.html') {
-            console.log("auth.js: Usuário logado em login.html, redirecionando para index.html."); // LOG ADICIONAL
-            window.location.href = 'index.html'; // Redireciona para o dashboard
+    } else { // Se não há utilizador com sessão iniciada
+        if (document.getElementById('logout-link')) {
+            document.getElementById('logout-link').style.display = 'none';
         }
-
-        // Se estiver na página admin e NÃO for admin, redireciona
-        if (currentPage === 'admin.html' && userRole !== 'admin') {
-            alert('Acesso restrito: Apenas administradores podem acessar esta página.');
-            console.log("auth.js: Acesso negado a admin.html para usuário não-admin. Redirecionando para index.html."); // LOG ADICIONAL
-            window.location.href = 'index.html'; // Redireciona para o dashboard
-        }
-
-    } else {
-        // Usuário NÃO logado
-        console.log("auth.js: Nenhum usuário logado.");
-        const adminLinks = document.querySelectorAll('.nav-link.admin-only');
-        adminLinks.forEach(link => link.style.display = 'none'); // Oculta o link admin
-
-        // Ocultar link de Sair quando o usuário NÃO está logado
-        if (logoutLink) {
-            logoutLink.style.display = 'none';
-        }
-
-        // Se estiver em uma página protegida e não for a de login, redireciona para o login
-        if (protectedPages.includes(currentPage) && currentPage !== 'login.html') {
-            console.log(`auth.js: Página ${currentPage} protegida. Usuário não logado, redirecionando para login.html.`); // LOG ADICIONAL
-            window.location.href = 'login.html'; // Redireciona para a página de login
+        // Redireciona para a página de login se tentar aceder a qualquer outra página.
+        if (currentPage !== 'login.html') {
+            redirectTo('login.html');
         }
     }
 });
 
-// Lógica de Login (apenas na página de login.html)
-if (loginBtn) { // Verifica se o botão de login existe na página atual (ou seja, estamos em login.html)
-    loginBtn.addEventListener('click', async () => {
-        const email = loginEmailInput.value.trim(); // Trim para remover espaços em branco
-        const password = loginPasswordInput.value.trim();
 
+// --- FUNÇÕES DE AÇÃO (Login, Logout, etc.) ---
+const loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.addEventListener('click', async () => {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        const statusDiv = document.getElementById('login-status');
         if (!email || !password) {
-            loginStatusDiv.textContent = 'Por favor, preencha email e senha.';
-            loginStatusDiv.className = 'status-message error'; // Adiciona classe de erro
+            statusDiv.textContent = 'Preencha o email e a palavra-passe.';
+            statusDiv.className = 'status-message error';
             return;
         }
-
-        loginStatusDiv.textContent = 'Entrando...';
-        loginStatusDiv.className = 'status-message'; // Limpa classes de status anteriores
-
+        statusDiv.textContent = 'A autenticar...';
+        statusDiv.className = 'status-message';
         try {
-            const auth = firebase.auth(); // Acessando a instância global de Auth (compat)
-            await auth.signInWithEmailAndPassword(email, password);
-            loginStatusDiv.textContent = 'Login realizado com sucesso! Redirecionando...';
-            loginStatusDiv.className = 'status-message success'; // Adiciona classe de sucesso
-            // onAuthStateChanged (acima) cuidará do redirecionamento após o login bem-sucedido
+            await firebase.auth().signInWithEmailAndPassword(email, password);
         } catch (error) {
-            let errorMessage = "Erro ao fazer login.";
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                errorMessage = "Email ou senha inválidos.";
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = "Formato de email inválido.";
-            } else if (error.code === 'auth/too-many-requests') {
-                 errorMessage = "Muitas tentativas de login. Tente novamente mais tarde.";
-            }
-            loginStatusDiv.textContent = `${errorMessage} (${error.message})`;
-            loginStatusDiv.className = 'status-message error'; // Adiciona classe de erro
-            console.error('auth.js: Erro de login:', error);
+            statusDiv.textContent = "Email ou palavra-passe inválidos.";
+            statusDiv.className = 'status-message error';
+            console.error('Erro de login:', error);
         }
     });
 }
 
-// Lógica de Logout
+const logoutLink = document.getElementById('logout-link');
 if (logoutLink) {
     logoutLink.addEventListener('click', async (e) => {
-        e.preventDefault(); // Previne o comportamento padrão do link
-        try {
-            const auth = firebase.auth(); // Acessando a instância global de Auth (compat)
-            await auth.signOut();
-            alert("Você foi desconectado.");
-            window.location.href = 'login.html'; // Redireciona para a página de login após o logout
-        } catch (error) {
-            console.error("auth.js: Erro ao desconectar:", error);
-            alert("Erro ao desconectar: " + error.message);
-        }
+        e.preventDefault();
+        await firebase.auth().signOut();
     });
 }
 
-/**
- * Obtém o perfil (role) do usuário logado no Firestore.
- * @param {string} uid O UID do usuário do Firebase Authentication.
- * @returns {Promise<string>} O perfil do usuário ('user' ou 'admin'), ou 'user' como padrão.
- */
-async function getUserRole(uid) {
-    try {
-        const db = firebase.firestore(); // Acessando a instância global do Firestore (compat)
-        const userRoleDoc = db.collection('userRoles').doc(uid); // Referência ao documento de perfil do usuário
-        const docSnap = await userRoleDoc.get(); // Obtém o snapshot do documento
-        if (docSnap.exists) { // Verifica se o documento existe (compat)
-            return docSnap.data().role; // Retorna o perfil
-        }
-        return 'user'; // Padrão se o perfil não for encontrado
-    } catch (error) {
-        console.error("auth.js: Erro ao obter perfil do usuário:", error);
-        return 'user'; // Em caso de erro, retorna 'user' por segurança
-    }
-}
-
-/**
- * Exporta a função checkAdminAccess para ser usada por outros módulos (como admin.js).
- * Esta função verifica o acesso de administrador e redireciona se necessário.
- * @returns {Promise<boolean>} Resolve true se o usuário tem acesso ou é redirecionado, false caso contrário.
- */
+// --- FUNÇÕES EXPORTADAS PARA O PAINEL DE ADMIN ---
 export async function checkAdminAccess() {
-    return new Promise((resolve) => {
-        // Usa onAuthStateChanged para garantir que o usuário está autenticado antes de verificar o perfil
-        const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => { // Acessando auth via firebase.auth()
-            unsubscribe(); // Desinscreve-se após a primeira verificação para evitar múltiplos disparos
-
-            if (!user) {
-                // Se não há usuário, redireciona para login
-                window.location.href = 'login.html';
-                resolve(false);
-            } else {
-                const userRole = await getUserRole(user.uid);
-                // Se o usuário não é admin e está tentando acessar admin.html
-                if (userRole !== 'admin' && window.location.pathname.includes('admin.html')) {
-                    alert('Acesso restrito: Apenas administradores podem acessar esta página.');
-                    window.location.href = 'index.html'; // Redireciona para o dashboard
-                    resolve(false);
+    return new Promise((resolve, reject) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
+            unsubscribe();
+            if (user) {
+                const userProfile = await getUserProfile(user.uid);
+                if (userProfile.role === 'admin') {
+                    resolve(true);
+                } else {
+                    redirectTo('index.html');
+                    reject(new Error('Acesso negado: o utilizador não é um administrador.'));
                 }
-                resolve(true); // Acesso permitido ou não está em uma página restrita
+            } else {
+                redirectTo('login.html');
+                reject(new Error('Acesso negado: o utilizador não tem sessão iniciada.'));
             }
         });
     });
 }
 
-/**
- * NOVO: Função para criar um novo usuário SEM fazer o login automático do usuário recém-criado.
- * Isso permite que o admin crie a conta e permaneça logado.
- * @param {string} email O email do novo usuário.
- * @param {string} password A senha do novo usuário.
- * @param {string} role O perfil (role) do novo usuário ('user' ou 'admin').
- * @returns {Promise<{success: boolean, user?: firebase.User, error?: firebase.FirebaseError}>} Objeto com sucesso/erro e o usuário criado.
- */
 export async function createNewUserForAdmin(email, password, role) {
-    const auth = firebase.auth();
     const db = firebase.firestore();
-
-    // Armazena o usuário atualmente logado (o admin)
-    const currentAdminUser = auth.currentUser;
-
+    const tempAppName = `app-${Date.now()}`;
+    let tempApp;
     try {
-        // Cria o novo usuário. ATENÇÃO: Esta função *sempre* loga automaticamente o usuário recém-criado.
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        tempApp = firebase.initializeApp(firebase.app().options, tempAppName);
+        const tempAuth = tempApp.auth();
+
+        const userCredential = await tempAuth.createUserWithEmailAndPassword(email, password);
         const newUser = userCredential.user;
-
-        console.log(`auth.js: Usuário temporariamente logado após criação: ${newUser.email}`); // LOG ADICIONAL
-
-        // Imediatamente desloga o usuário recém-criado para manter o admin logado (se ele existia).
-        // Isso é uma tentativa de UX, mas tem nuances.
-        if (currentAdminUser) {
-            await auth.signOut(); // Desloga o novo usuário (ou quem estiver logado)
-            console.log("auth.js: Novo usuário deslogado. Tentando re-autenticar o admin..."); // LOG ADICIONAL
-            // Reautentica o admin original
-            await auth.signInWithEmailAndPassword(currentAdminUser.email, localStorage.getItem('adminPasswordHash')); // ATENÇÃO: Armazenar senha é inseguro! Melhor solução seria Cloud Function.
-            console.log(`auth.js: Admin ${currentAdminUser.email} re-autenticado.`); // LOG ADICIONAL
-        } else {
-            // Se não havia admin logado (cenário improvável para essa função), apenas desloga o novo usuário
-            await auth.signOut();
-            console.log("auth.js: Nenhum admin logado. Novo usuário deslogado."); // LOG ADICIONAL
-        }
-
-        // Salva o perfil (role) do novo usuário no Firestore.
-        await db.collection('userRoles').doc(newUser.uid).set({
+        
+        const profileData = {
             email: email,
             role: role,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        console.log(`auth.js: Usuário ${email} criado com sucesso e perfil salvo. Role: ${role}.`);
-        return { success: true, user: newUser };
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+        await db.collection('userRoles').doc(newUser.uid).set(profileData);
+        
+        alert(`Utilizador ${email} (perfil: ${role}) criado com sucesso!`);
 
     } catch (error) {
-        console.error("auth.js: Erro ao criar novo usuário:", error);
-        // Em caso de erro na criação, se o admin foi deslogado por alguma tentativa anterior de create,
-        // pode ser necessário tentar re-autenticá-lo aqui também.
-        if (currentAdminUser && !auth.currentUser && error.code !== 'auth/email-already-in-use') { // Se o admin não está mais logado e não foi só email em uso
-             console.warn("auth.js: Admin parece ter sido deslogado por um erro de criação. Tentando re-autenticar.");
-             try {
-                await auth.signInWithEmailAndPassword(currentAdminUser.email, localStorage.getItem('adminPasswordHash'));
-             } catch (reauthError) {
-                console.error("auth.js: Erro ao re-autenticar admin após falha na criação de usuário:", reauthError);
-                alert("Sua sessão de administrador pode ter expirado. Por favor, faça login novamente.");
-                window.location.href = 'login.html';
-             }
+        if (error.code === 'auth/email-already-in-use') {
+            alert(
+                'ERRO: O email informado já está registado.\n\n' +
+                'Para corrigir, siga estes passos:\n' +
+                '1. Vá à Consola do Firebase > Authentication.\n' +
+                '2. Apague o utilizador com este email.\n' +
+                '3. Volte aqui e crie o utilizador novamente.'
+            );
+        } else {
+            alert(`Erro ao criar utilizador: ${error.message}`);
         }
-        return { success: false, error: error };
+        console.error("Erro em createNewUserForAdmin:", error);
+    } finally {
+        if (tempApp) {
+            await tempApp.delete();
+        }
     }
 }

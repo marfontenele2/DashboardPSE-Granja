@@ -1,75 +1,96 @@
-// data.js
+// js/data.js (VERSÃO FINAL COM NOVAS REGRAS DE NEGÓCIO)
 
-// A lista de escolas (schools) agora será gerenciada dinamicamente no Firestore
-// através do Painel Administrativo. Este arquivo NÃO conterá mais a lista estática.
+/*
+ * Este arquivo funciona como o cérebro de configuração da aplicação.
+ * Ele centraliza definições importantes como eMultis, todas as ações possíveis,
+ * e a nova estrutura de Ações Prioritárias Agregadas.
+ */
 
-// Lista de eMultis (utilizada para gerar botões e rankings)
-// Mantenha esta lista em caixa alta para consistência com as comparações (eMulti.toUpperCase())
+// Lista de eMultis.
 export const emultis = [
     'SEDE',
     'PARAZINHO',
-    'TIMONHA', // CORRIGIDO: Agora em caixa alta para consistência
-    // Adicione outras eMultis conforme necessário
+    'TIMONHA',
 ];
 
-// Todas as ações PSE possíveis (gerais), com nomes legíveis para exibição
-export const allPseActions = [
-    'Antropometria',
-    'Aplicação tópica de flúor',
-    'Desenvolvimento da linguagem',
-    'Escovação dental supervisionada',
-    'Práticas corporais / atividade física',
-    'Saúde auditiva',
-    'Saúde ocular',
-    'Verificação da situação vacinal',
-    'Doenças Negligenciadas',
-    'Alimentação Saudável',
-    'Cultura de Paz',
-    'Drogas',
-    'Prevenção de Violências e Acidentes',
-    'Saúde Ambiental',
-    'Saúde Bucal',
-    'Saúde Mental',
-    'Saúde Sexual/HIV/IST',
-    'Semana saúde na escola',
-    'Covid19'
+// A "fonte da verdade" para TODAS as ações individuais possíveis no sistema.
+// EM js/data.js
+
+// EM js/data.js (apenas para verificação, esta lista é a mesma da etapa anterior)
+
+export const normalizedPseActions = [
+    { key: 'Antropometria', name: 'Antropometria', icon: 'fas fa-ruler-combined' },
+    { key: 'Aplicaotpicadefluor', name: 'Aplicação Tópica de Flúor', icon: 'fas fa-tooth' },
+    { key: 'Desenvolvimentodalinguagem', name: 'Desenvolvimento da Linguagem', icon: 'fas fa-comments' },
+    { key: 'Escovaodentalsupervisionada', name: 'Escovação Dental Supervisionada', icon: 'fas fa-toothbrush' }, // <--- Ícone aqui
+    { key: 'Praticascorporaisatividadefisica', name: 'Práticas Corporais / Atividade Física', icon: 'fas fa-person-running' },
+    { key: 'Saudeauditiva', name: 'Saúde Auditiva', icon: 'fas fa-ear-listen' },
+    { key: 'Saudeocular', name: 'Saúde Ocular', icon: 'fas fa-eye' },
+    { key: 'VerificacaodasituacaoVacinal', name: 'Verificação da Situação Vacinal', icon: 'fas fa-syringe' },
+    { key: 'DoencasNegligenciadas', name: 'Doenças Negligenciadas', icon: 'fas fa-microscope' },
+    { key: 'AlimentacaoSaudavel', name: 'Alimentação Saudável', icon: 'fas fa-carrot' },
+    { key: 'CulturaDePaz', name: 'Cultura de Paz', icon: 'fas fa-dove' },
+    { key: 'PrevencaoDeViolenciasEAcidentes', name: 'Prevenção de Violências e Acidentes', icon: 'fas fa-shield-halved' },
+    { key: 'SaudeAmbiental', name: 'Saúde Ambiental', icon: 'fas fa-leaf' },
+    { key: 'SaudeBucal', name: 'Saúde Bucal', icon: 'fas fa-tooth' },
+    { key: 'SaudeMental', name: 'Saúde Mental', icon: 'fas fa-brain' },
+    { key: 'SaudeSexualHIVIST', name: 'Saúde Sexual/HIV/IST', icon: 'fas fa-ribbon' },
+    { key: 'SemanasNaEscola', name: 'Semana Saúde na Escola', icon: 'fas fa-school-flag' },
+    { key: 'Covid19', name: 'COVID-19', icon: 'fas fa-virus-covid' }
+];
+// Gera uma lista simples contendo apenas as chaves (keys) de todas as ações.
+export const allPseActions = normalizedPseActions.map(action => action.key);
+
+
+// ==============================================================================
+// NOVA ESTRUTURA PARA O INDICADOR 2 - AÇÕES PRIORITÁRIAS AGREGADAS
+// Esta é a nova regra de negócio que definimos. Cada objeto representa um grupo prioritário.
+// A lógica será: uma escola precisa cumprir pelo menos UMA ação de CADA grupo abaixo.
+// ==============================================================================
+export const priorityActionGroups = [
+    {
+        name: 'Prevenção da violência e promoção da cultura da paz',
+        actions: ['PrevencaoDeViolenciasEAcidentes', 'CulturaDePaz']
+    },
+    {
+        name: 'Saúde mental',
+        actions: ['SaudeMental']
+    },
+    {
+        name: 'Saúde sexual e reprodutiva',
+        actions: ['SaudeSexualHIVIST']
+    },
+    {
+        name: 'Alimentação saudável e prevenção da obesidade',
+        actions: ['AlimentacaoSaudavel', 'Antropometria']
+    },
+    {
+        name: 'Verificação da situação vacinal',
+        actions: ['VerificacaodasituacaoVacinal']
+    }
 ];
 
-// Ações PSE consideradas prioritárias (para o Indicador 2)
-export const priorityPseActions = [
-    'Antropometria',
-    'Verificação da situação vacinal',
-    'Saúde Bucal',
-    'Saúde Ocular'
-];
 
-// Mapeamento de colunas da planilha "PSE Tema" para nomes de ações no sistema
-// As chaves são os nomes exatos das colunas no Excel, os valores são os nomes das ações em allPseActions
+// Mapeamentos de colunas da planilha para as chaves internas (continua o mesmo)
 export const pseTemaColumnMapping = {
-    'Agravos negligenciados': 'Doenças Negligenciadas',
-    'Alimentação saudável': 'Alimentação Saudável',
-    'Cidadania e direitos humanos': 'Cultura de Paz',
-    'Dependência química / tabaco /': 'Drogas',
-    'Prevenção da violência e promo': 'Prevenção de Violências e Acidentes',
-    'Saúde ambiental': 'Saúde Ambiental',
-    'Saúde bucal': 'Saúde Bucal',
-    'Saúde mental': 'Saúde Mental',
-    'Saúde sexual e reprodutiva': 'Saúde Sexual/HIV/IST',
-    'Semana saúde na escola': 'Semana saúde na escola',
+    'Agravos negligenciados': 'DoencasNegligenciadas',
+    'Alimentação saudável': 'AlimentacaoSaudavel',
+    'Cidadania e direitos humanos': 'CulturaDePaz',
+    'Prevenção da violência e promo': 'PrevencaoDeViolenciasEAcidentes',
+    'Saúde ambiental': 'SaudeAmbiental',
+    'Saúde bucal': 'SaudeBucal',
+    'Saúde mental': 'SaudeMental',
+    'Saúde sexual e reprodutiva': 'SaudeSexualHIVIST',
+    'Semana saúde na escola': 'SemanasNaEscola',
 };
 
-// Mapeamento de colunas da planilha "PSE Prática" para nomes de ações no sistema
-// As chaves são os nomes exatos das colunas no Excel, os valores são os nomes das ações em allPseActions
 export const psePraticaColumnMapping = {
     'Antropometria': 'Antropometria',
-    'Aplicação tópica de flúor': 'Aplicação tópica de flúor',
-    'Desenvolvimento da linguagem': 'Desenvolvimento da linguagem',
-    'Escovação dental supervisionad': 'Escovação dental supervisionada',
-    'Práticas corporais / atividade': 'Práticas corporais / atividade física',
-    'Saúde auditiva': 'Saúde Auditiva',
-    'Saúde ocular': 'Saúde Ocular',
-    'Verificação da situação vacina': 'Verificação da situação vacinal',
+    'Aplicação tópica de flúor': 'Aplicaotpicadefluor',
+    'Desenvolvimento da linguagem': 'Desenvolvimentodalinguagem',
+    'Escovação dental supervisionad': 'Escovaodentalsupervisionada',
+    'Práticas corporais / atividade': 'Praticascorporaisatividadefisica',
+    'Saúde auditiva': 'Saudeauditiva',
+    'Saúde ocular': 'Saudeocular',
+    'Verificação da situação vacina': 'VerificacaodasituacaoVacinal',
 };
-
-// Um valor de porcentagem alvo para exibição ou cálculos, se necessário.
-export const INDICATOR_TARGET_PERCENTAGE = 75;

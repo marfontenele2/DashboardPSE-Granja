@@ -12,8 +12,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
   <script>
-    // Suas credenciais de configuração do Firebase.
-    // Esta configuração é a mesma para todas as páginas e é inicializada UMA ÚNICA VEZ por página HTML.
     const firebaseConfig = {
       apiKey: "AIzaSyDtF5zN7KLcoMvvOlYhP1Btn0hD_IcFUhs",
       authDomain: "pse-granja.firebaseapp.com",
@@ -22,9 +20,20 @@
       messagingSenderId: "3638651287",
       appId: "1:3638651287:web:760797d66ed93cab0efcd2"
     };
-    // Inicializa o Firebase AQUI. Após esta linha, 'firebase.firestore()' e 'firebase.auth()' estarão disponíveis globalmente.
     firebase.initializeApp(firebaseConfig);
   </script>
+  <!-- Estilo para o display da competência -->
+  <style>
+    .header-competencia {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--granja-yellow);
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 5px 15px;
+      border-radius: 15px;
+      margin-left: 20px;
+    }
+  </style>
 </head>
 <body>
 
@@ -33,11 +42,14 @@
       <div class="header-logo-container">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjH8-ldDYUyOf8ZmuPKLNFnAkBVEq_OUAhY30-hCLxiK83G3qAQ0ufda9Vihur1GoZqTB_0gfrj-2cFNhGUh3pI9qmsIiSiKSfR5NBpFTIrVOwTOEomrYhDtMrfAW9tQk4Fo_OX1haM678hcQe_EjRHql94BBK0E38lrQiimo8zQGG5aPw3YYiKRD0FAyE/s1600/Logo%20transparente%20de%20Granja.png" alt="Logo do Município de Granja" class="logo">
         <h1>Dashboard PSE</h1>
+        <span id="competencia-display" class="header-competencia"></span>
       </div>
       <div class="header-info">
         <nav class="main-nav">
             <a href="index.html" class="nav-link active">Dashboard</a>
             <a href="escolas.html" class="nav-link">Escolas por eMulti</a>
+            <a href="vacinacao.html" class="nav-link">Vacinação</a>
+            <a href="saudebucal.html" class="nav-link">Saúde Bucal</a>
             <a href="admin.html" class="nav-link admin-only">Painel Admin</a>
             <a href="#" id="logout-link" class="nav-link">Sair</a>
         </nav>
@@ -45,13 +57,13 @@
     </div>
   </header>
 
-  <div class="container">
+  <main class="container">
     <section id="seletor-indicador-container"></section>
     <section id="visao-geral-container" class="visao-geral-grid"></section>
     <section id="filtros-container" class="painel-filtros" style="display:none;"></section>
     <section id="legendas-container" class="legendas-container" style="display:none;"></section>
-    <main id="grade-principal" class="grade-container"></main>
-  </div>
+    <div id="grade-principal" class="grade-container"></div>
+  </main>
 
   <footer class="footer">
     <p>© 2025 Secretaria Municipal de Saúde de Granja. Todos os direitos reservados.</p>
@@ -59,5 +71,12 @@
 
   <script src="js/main.js" type="module"></script>
   <script src="js/auth.js" type="module"></script>
+  <!-- SCRIPT PARA CARREGAR A COMPETÊNCIA -->
+  <script type="module">
+    import { loadAndDisplayCompetencia } from './js/competencia.js';
+    document.addEventListener('DOMContentLoaded', () => {
+        loadAndDisplayCompetencia();
+    });
+  </script>
 </body>
 </html>

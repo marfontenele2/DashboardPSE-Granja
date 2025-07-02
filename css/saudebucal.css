@@ -1,0 +1,79 @@
+/* css/saudebucal.css */
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.dashboard-header h2 {
+    color: var(--granja-green-dark);
+}
+
+.dashboard-header p {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 600px;
+    margin: 10px auto 0;
+}
+
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.team-card {
+    background-color: var(--granja-white);
+    border: 1px solid var(--granja-gray);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.team-card h3 {
+    text-align: center;
+    color: var(--granja-blue);
+    margin: 0 0 15px 0;
+    border-bottom: 2px solid var(--granja-light-gray);
+    padding-bottom: 15px;
+}
+
+.percentage-display {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--granja-green-dark);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.inep-list {
+    list-style: none;
+    padding: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--granja-light-gray);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.inep-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.inep-list li:last-child {
+    border-bottom: none;
+}
+
+.inep-list .status-completed {
+    color: var(--granja-green-medium);
+}
+
+.inep-list .status-pending {
+    color: var(--granja-red);
+}

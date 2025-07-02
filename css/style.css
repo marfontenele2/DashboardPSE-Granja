@@ -544,3 +544,60 @@ body {
   font-size: .9em;
   margin-top: auto;
 }
+/* EM css/style.css (adicionar no final do arquivo) */
+
+/* Estilos para o ícone dentro do card de ação */
+.card-acao-icon {
+  font-size: 2.5rem; /* Tamanho grande para o ícone */
+  color: var(--granja-blue); /* Cor azul padrão */
+  text-align: center; /* Centraliza o ícone */
+  margin-bottom: 15px; /* Espaço entre o ícone e o título */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito sutil ao passar o mouse sobre o card */
+.card-acao:hover .card-acao-icon {
+  transform: scale(1.1);
+}
+
+/* Título do card de ação */
+.card-acao h3 {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 10px;
+  color: var(--granja-dark-gray);
+  min-height: 40px; /* Garante que os títulos tenham uma altura mínima para alinhar os cards */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* EM css/style.css (adicionar no final do arquivo) */
+
+/* Container para a lista de status das eMultis dentro dos cards */
+.emulti-status-list {
+  list-style: none; /* Remove os pontinhos da lista */
+  padding: 0;
+  margin-top: 15px;
+  width: 100%;
+  border-top: 1px solid #eee; /* Linha separadora */
+  padding-top: 10px;
+}
+
+/* Cada item da lista (cada eMulti) */
+.emulti-status-item {
+  display: flex;
+  justify-content: space-between; /* Alinha nome à esquerda e ícone à direita */
+  align-items: center;
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+/* Ícones de check (verde) e xis (cinza) */
+.emulti-status-item .status-icon-check {
+  color: var(--granja-green-medium);
+  font-weight: bold;
+}
+
+.emulti-status-item .status-icon-times {
+  color: #ccc; /* Cinza claro para não chamar muita atenção */
+}
